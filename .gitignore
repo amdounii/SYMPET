@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 ###> symfony/framework-bundle ###
 /.env.local
@@ -18,3 +19,10 @@
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
+=======
+/vendor/ 
+/var/ 
+/.env.local 
+/node_modules/ 
+/public/build/ 
+>>>>>>> 3f0a1f8617135082ea418bf7dbf107d149e8f261
