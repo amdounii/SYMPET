@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<h1>Mes commandes</h1>
+
+<table class="table">
+    <tr>
+        <th>Numéro</th>
+        <th>Date</th>
+        <th>Total</th>
+        <th>Statut</th>
+        <th></th>
+    </tr>
+
+    {% for c in commandes %}
+        <tr>
+            <td>{{ c.numero }}</td>
+            <td>{{ c.dateCommande|date('Y-m-d') }}</td>
+            <td>{{ c.total }}</td>
+            <td>{{ c.statut }}</td>
+            <td>
+                <a href="{{ path('app_commande_show', {id: c.id}) }}">Voir</a>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

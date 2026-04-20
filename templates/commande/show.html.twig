@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<h1>Commande {{ commande.numero }}</h1>
+
+<ul>
+    {% for ligne in commande.ligneCommandes %}
+        <li>
+            {{ ligne.produit.nom }} × {{ ligne.quantite }} = {{ ligne.sousTotal }}
+        </li>
+    {% endfor %}
+</ul>
+
+<h3>Total : {{ commande.total }} TND</h3>
+
+{% endblock %}

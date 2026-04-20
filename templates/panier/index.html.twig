@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<h1>Panier</h1>
+
+{% if dataPanier is empty %}
+    <div class="alert alert-warning">Panier vide</div>
+{% else %}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Produit</th>
+            <th>Prix</th>
+            <th>Quantité</th>
+            <th>Total</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for item in dataPanier %}
+            <tr>
+                <td>{{ item.produit.nom }}</td>
+                <td>{{ item.produit.prix }}</td>
+                <td>
+                    <a href="{{ path('app_panier_decrease', {id: item.produit.id}) }}">-</a>
+                    {{ item.quantite }}
+                    <a href="{{ path('app_panier_increase', {id: item.produit.id}) }}">+</a>
+                </td>
+                <td>{{ item.sousTotal }}</td>
+                <td>
+                    <a href="{{ path('app_panier_remove', {id: item.produit.id}) }}" class="btn btn-danger btn-sm">
+                        Supprimer
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3>Total : {{ total }} TND</h3>
+
+<a href="{{ path('app_commande_valider') }}" class="btn btn-primary">
+    Valider commande
+</a>
+
+<a href="{{ path('app_panier_clear') }}" class="btn btn-danger">
+    Vider
+</a>
+
+{% endif %}
+
+{% endblock %}

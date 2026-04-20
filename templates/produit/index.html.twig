@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Produits{% endblock %}
+
+{% block body %}
+
+<h1 class="mb-4">Produits</h1>
+
+<form method="get" class="row mb-4">
+    <div class="col-md-4">
+        <input type="text" name="search" class="form-control" placeholder="Recherche..." value="{{ search }}">
+    </div>
+
+    <div class="col-md-4">
+        <select name="categorie" class="form-select">
+            <option value="">Toutes les catégories</option>
+            {% for c in categories %}
+                <option value="{{ c.id }}">{{ c.nom }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="col-md-2">
+        <button class="btn btn-primary">Rechercher</button>
+    </div>
+</form>
+
+<div class="row">
+    {% for produit in produits %}
+        <div class="col-md-3 mb-4">
+            <div class="card">
+                <img src="{{ produit.image ?? 'https://via.placeholder.com/150' }}" class="card-img-top">
+
+                <div class="card-body">
+                    <h5>{{ produit.nom }}</h5>
+                    <p>{{ produit.prix }} TND</p>
+
+                    <a href="{{ path('app_produit_show', {id: produit.id}) }}" class="btn btn-info btn-sm">
+                        Détails
+                    </a>
+
+                    <a href="{{ path('app_panier_add', {id: produit.id}) }}" class="btn btn-success btn-sm">
+                        Ajouter
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
