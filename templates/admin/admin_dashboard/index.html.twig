@@ -1,0 +1,99 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard Admin{% endblock %}
+
+{% block body %}
+    <h1 class="mb-4">Tableau de bord Admin</h1>
+
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <a href="{{ path('admin_produit_index') }}" class="text-decoration-none">
+                <div class="card shadow-sm text-center border-primary">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">Produits</h5>
+                        <p class="card-text">Gérer les produits</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-3">
+            <a href="{{ path('admin_categorie_index') }}" class="text-decoration-none">
+                <div class="card shadow-sm text-center border-success">
+                    <div class="card-body">
+                        <h5 class="card-title text-success">Catégories</h5>
+                        <p class="card-text">Gérer les catégories</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-3">
+            <a href="{{ path('admin_commande_index') }}" class="text-decoration-none">
+                <div class="card shadow-sm text-center border-warning">
+                    <div class="card-body">
+                        <h5 class="card-title text-warning">Commandes</h5>
+                        <p class="card-text">Voir les commandes</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-3">
+            <a href="{{ path('admin_user_index') }}" class="text-decoration-none">
+                <div class="card shadow-sm text-center border-danger">
+                    <div class="card-body">
+                        <h5 class="card-title text-danger">Utilisateurs</h5>
+                        <p class="card-text">Gérer les utilisateurs</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card shadow-sm text-center">
+                <div class="card-body">
+                    <h5>Chiffre d'affaire</h5>
+                    <h3 class="text-primary">{{ chiffreAffaire }} DT</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-sm text-center">
+                <div class="card-body">
+                    <h5>Nombre de clients</h5>
+                    <h3 class="text-success">{{ nbClients }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h4>Top produits</h4>
+            <table class="table table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Produit</th>
+                        <th>Total vendu</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in topProduits %}
+                        <tr>
+                            <td>{{ item[0].nom }}</td>
+                            <td>{{ item.totalVendu }}</td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="2" class="text-center">Aucune donnée disponible</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

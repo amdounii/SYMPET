@@ -3,49 +3,57 @@
 {% block title %}Produits{% endblock %}
 
 {% block body %}
+    <h1 class="mb-4">Liste des produits</h1>
 
-<h1 class="mb-4">Produits</h1>
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-5">
+                    <label class="form-label">Recherche par nom</label>
+                    <input type="text" name="search" class="form-control" value="{{ search ?? '' }}">
+                </div>
 
-<form method="get" class="row mb-4">
-    <div class="col-md-4">
-        <input type="text" name="search" class="form-control" placeholder="Recherche..." value="{{ search }}">
+                <div class="col-md-5">
+                    <label class="form-label">Catégorie</label>
+                    <select name="categorie" class="form-select">
+                        <option value="">-- Toutes les catégories --</option>
+                        {% for categorie in categories %}
+                            <option value="{{ categorie.id }}" {% if categorieSelectionnee is defined and categorieSelectionnee == categorie.id %}selected{% endif %}>
+                                {{ categorie.nom }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-2 d-flex align-items-end">
+                    <button class="btn btn-primary w-100" type="submit">Filtrer</button>
+                </div>
+            </form>
+        </div>
     </div>
 
-    <div class="col-md-4">
-        <select name="categorie" class="form-select">
-            <option value="">Toutes les catégories</option>
-            {% for c in categories %}
-                <option value="{{ c.id }}">{{ c.nom }}</option>
-            {% endfor %}
-        </select>
-    </div>
-
-    <div class="col-md-2">
-        <button class="btn btn-primary">Rechercher</button>
-    </div>
-</form>
-
-<div class="row">
-    {% for produit in produits %}
-        <div class="col-md-3 mb-4">
-            <div class="card">
-                <img src="{{ produit.image ?? 'https://via.placeholder.com/150' }}" class="card-img-top">
-
-                <div class="card-body">
-                    <h5>{{ produit.nom }}</h5>
-                    <p>{{ produit.prix }} TND</p>
-
-                    <a href="{{ path('app_produit_show', {id: produit.id}) }}" class="btn btn-info btn-sm">
-                        Détails
-                    </a>
-
-                    <a href="{{ path('app_panier_add', {id: produit.id}) }}" class="btn btn-success btn-sm">
-                        Ajouter
-                    </a>
+    <div class="row">
+        {% for produit in produits %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    {% if produit.image %}
+                        <img src="{{ asset('uploads/' ~ produit.image) }}" class="card-img-top" alt="{{ produit.nom }}" style="height: 220px; object-fit: cover;">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ produit.nom }}</h5>
+                        <p class="card-text">{{ produit.description|slice(0, 100) }}...</p>
+                        <p><strong>Prix :</strong> {{ produit.prix }} DT</p>
+                        <p><strong>Stock :</strong> {{ produit.stock }}</p>
+                        <p><strong>Catégorie :</strong> {{ produit.categorie.nom }}</p>
+                    </div>
+                    <div class="card-footer bg-white border-0 d-flex justify-content-between">
+                        <a href="{{ path('app_produit_show', {'id': produit.id}) }}" class="btn btn-outline-primary btn-sm">Voir détail</a>
+                        <a href="{{ path('app_panier_add', {'id': produit.id}) }}" class="btn btn-success btn-sm">Ajouter</a>
+                    </div>
                 </div>
             </div>
-        </div>
-    {% endfor %}
-</div>
-
+        {% else %}
+            <p>Aucun produit trouvé.</p>
+        {% endfor %}
+    </div>
 {% endblock %}

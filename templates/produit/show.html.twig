@@ -1,17 +1,29 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Détail produit{% endblock %}
+
 {% block body %}
+    <div class="card shadow-sm">
+        <div class="row g-0">
+            <div class="col-md-4">
+                {% if produit.image %}
+                    <img src="{{ asset('uploads/' ~ produit.image) }}" class="img-fluid rounded-start w-100" alt="{{ produit.nom }}" style="height: 100%; object-fit: cover;">
+                {% else %}
+                    <div class="p-5 text-center text-muted">Pas d'image</div>
+                {% endif %}
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h2 class="card-title">{{ produit.nom }}</h2>
+                    <p class="card-text">{{ produit.description }}</p>
+                    <p><strong>Prix :</strong> {{ produit.prix }} DT</p>
+                    <p><strong>Stock :</strong> {{ produit.stock }}</p>
+                    <p><strong>Catégorie :</strong> {{ produit.categorie.nom }}</p>
 
-<h1>{{ produit.nom }}</h1>
-
-<img src="{{ produit.image ?? 'https://via.placeholder.com/300' }}" width="300">
-
-<p>{{ produit.description }}</p>
-<p><strong>Prix :</strong> {{ produit.prix }} TND</p>
-<p><strong>Stock :</strong> {{ produit.stock }}</p>
-
-<a href="{{ path('app_panier_add', {id: produit.id}) }}" class="btn btn-success">
-    Ajouter au panier
-</a>
-
+                    <a href="{{ path('app_panier_add', {'id': produit.id}) }}" class="btn btn-success">Ajouter au panier</a>
+                    <a href="{{ path('app_produit') }}" class="btn btn-secondary">Retour</a>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

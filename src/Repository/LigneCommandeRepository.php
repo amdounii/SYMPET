@@ -6,9 +6,6 @@ use App\Entity\LigneCommande;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * @extends ServiceEntityRepository<LigneCommande>
- */
 class LigneCommandeRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -18,10 +15,22 @@ class LigneCommandeRepository extends ServiceEntityRepository
 
     public function findByCommande(int $commandeId): array
     {
-        return $this->createQueryBuilder('l')
-            ->join('l.commande', 'c')
-            ->andWhere('c.id = :id')
+        return $this->createQueryBuilder('lc')
+            ->join('lc.commande', 'c')
+            ->where('c.id = :id')
             ->setParameter('id', $commandeId)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getProduitsPlusVendus(int $limit = 5): array
+    {
+        return $this->createQueryBuilder('lc')
+            ->select('p.nom AS produit, SUM(lc.quantite) AS totalVendu')
+            ->join('lc.produit', 'p')
+            ->groupBy('p.id')
+            ->orderBy('totalVendu', 'DESC')
+            ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
     }

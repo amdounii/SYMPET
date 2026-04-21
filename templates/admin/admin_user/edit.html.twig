@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier utilisateur{% endblock %}
+
+{% block body %}
+    <h1 class="mb-4">Modifier utilisateur</h1>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form method="post">
+                <div class="mb-3">
+                    <label class="form-label">Nom</label>
+                    <input type="text" name="nom" class="form-control" value="{{ user.nom }}">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Prénom</label>
+                    <input type="text" name="prenom" class="form-control" value="{{ user.prenom }}">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="email" class="form-control" value="{{ user.email }}">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Téléphone</label>
+                    <input type="text" name="telephone" class="form-control" value="{{ user.telephone }}">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Adresse</label>
+                    <input type="text" name="adresse" class="form-control" value="{{ user.adresse }}">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Rôles</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="roles[]" value="ROLE_USER" {% if 'ROLE_USER' in user.roles %}checked{% endif %}>
+                        <label class="form-check-label">ROLE_USER</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="roles[]" value="ROLE_ADMIN" {% if 'ROLE_ADMIN' in user.roles %}checked{% endif %}>
+                        <label class="form-check-label">ROLE_ADMIN</label>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary">Modifier</button>
+                <a href="{{ path('admin_user_index') }}" class="btn btn-secondary">Retour</a>
+            </form>
+        </div>
+    </div>
+{% endblock %}

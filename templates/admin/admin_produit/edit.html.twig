@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier produit{% endblock %}
+
+{% block body %}
+    <h1 class="mb-4">Modifier produit</h1>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form method="post">
+                <div class="mb-3">
+                    <label class="form-label">Nom</label>
+                    <input type="text" name="nom" class="form-control" value="{{ produit.nom }}">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    <textarea name="description" class="form-control">{{ produit.description }}</textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Prix</label>
+                    <input type="number" step="0.01" name="prix" class="form-control" value="{{ produit.prix }}">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Stock</label>
+                    <input type="number" name="stock" class="form-control" value="{{ produit.stock }}">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Image</label>
+                    <input type="text" name="image" class="form-control" value="{{ produit.image }}">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Catégorie</label>
+                    <select name="categorie" class="form-select">
+                        {% for categorie in categories %}
+                            <option value="{{ categorie.id }}" {% if produit.categorie.id == categorie.id %}selected{% endif %}>
+                                {{ categorie.nom }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <button class="btn btn-primary">Modifier</button>
+                <a href="{{ path('admin_produit_index') }}" class="btn btn-secondary">Retour</a>
+            </form>
+        </div>
+    </div>
+{% endblock %}

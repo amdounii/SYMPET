@@ -1,29 +1,23 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Historique des commandes{% endblock %}
+
 {% block body %}
+    <h1 class="mb-4">Mes commandes</h1>
 
-<h1>Mes commandes</h1>
+    {% for commande in commandes %}
+        <div class="card shadow-sm mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Commande {{ commande.numero }}</h5>
+                <p class="mb-1"><strong>Date :</strong> {{ commande.dateCommande ? commande.dateCommande|date('d/m/Y H:i') : '' }}</p>
+                <p class="mb-1"><strong>Statut :</strong> {{ commande.statut }}</p>
+                <p class="mb-1"><strong>Total :</strong> {{ commande.total }} DT</p>
+                <p class="mb-3"><strong>Mode paiement :</strong> {{ commande.modePaiement ?: 'Non défini' }}</p>
 
-<table class="table">
-    <tr>
-        <th>Numéro</th>
-        <th>Date</th>
-        <th>Total</th>
-        <th>Statut</th>
-        <th></th>
-    </tr>
-
-    {% for c in commandes %}
-        <tr>
-            <td>{{ c.numero }}</td>
-            <td>{{ c.dateCommande|date('Y-m-d') }}</td>
-            <td>{{ c.total }}</td>
-            <td>{{ c.statut }}</td>
-            <td>
-                <a href="{{ path('app_commande_show', {id: c.id}) }}">Voir</a>
-            </td>
-        </tr>
+                <a href="{{ path('app_commande_show', {'id': commande.id}) }}" class="btn btn-outline-primary btn-sm">Voir détail</a>
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-secondary">Aucune commande trouvée.</div>
     {% endfor %}
-</table>
-
 {% endblock %}

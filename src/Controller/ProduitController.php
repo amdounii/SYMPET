@@ -7,45 +7,43 @@ use App\Repository\ProduitRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 
-final class ProduitController extends AbstractController
+#[Route('/produit')]
+class ProduitController extends AbstractController
 {
-    #[Route('/', name: 'app_home')]
-    #[Route('/produits', name: 'app_produit_index')]
+    #[Route('/', name: 'app_produit')]
     public function index(
         Request $request,
         ProduitRepository $produitRepository,
         CategorieRepository $categorieRepository
     ): Response {
         $search = $request->query->get('search');
-        $categorieId = $request->query->get('categorie');
+        $categorie = $request->query->get('categorie');
 
         if ($search) {
             $produits = $produitRepository->findByNom($search);
-        } elseif ($categorieId) {
-            $produits = $produitRepository->findByCategorie((int) $categorieId);
+        } elseif ($categorie) {
+            $produits = $produitRepository->findByCategorie((int) $categorie);
         } else {
             $produits = $produitRepository->findAll();
         }
 
-        $categories = $categorieRepository->findAll();
-
         return $this->render('produit/index.html.twig', [
             'produits' => $produits,
-            'categories' => $categories,
+            'categories' => $categorieRepository->findAll(),
             'search' => $search,
-            'categorieId' => $categorieId,
+            'categorieSelectionnee' => $categorie,
         ]);
     }
 
-    #[Route('/produit/{id}', name: 'app_produit_show', requirements: ['id' => '\d+'])]
+    #[Route('/show/{id}', name: 'app_produit_show')]
     public function show(int $id, ProduitRepository $produitRepository): Response
     {
         $produit = $produitRepository->find($id);
 
         if (!$produit) {
-            throw $this->createNotFoundException('Produit introuvable.');
+            throw $this->createNotFoundException('Produit introuvable');
         }
 
         return $this->render('produit/show.html.twig', [

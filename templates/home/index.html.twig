@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+    <div class="p-5 mb-4 bg-white rounded-3 shadow-sm">
+        <div class="container-fluid py-3">
+            <h1 class="display-5 fw-bold">Bienvenue sur SymPet</h1>
+            <p class="col-md-8 fs-5">Votre boutique en ligne dédiée aux produits pour animaux.</p>
+            <a href="{{ path('app_produit') }}" class="btn btn-primary btn-lg">Voir les produits</a>
+        </div>
+    </div>
+
+    <h2 class="mb-4">Nos produits</h2>
+
+    <div class="row">
+        {% for produit in produits %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    {% if produit.image %}
+                        <img src="{{ asset('uploads/' ~ produit.image) }}" class="card-img-top" alt="{{ produit.nom }}" style="height: 220px; object-fit: cover;">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ produit.nom }}</h5>
+                        <p class="card-text">{{ produit.description|slice(0, 100) }}...</p>
+                        <p class="fw-bold text-primary">{{ produit.prix }} DT</p>
+                        <p class="text-muted">Stock : {{ produit.stock }}</p>
+                    </div>
+                    <div class="card-footer bg-white border-0 d-flex justify-content-between">
+                        <a href="{{ path('app_produit_show', {'id': produit.id}) }}" class="btn btn-outline-primary btn-sm">Détail</a>
+                        <a href="{{ path('app_panier_add', {'id': produit.id}) }}" class="btn btn-success btn-sm">Ajouter</a>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <p>Aucun produit disponible.</p>
+        {% endfor %}
+    </div>
+{% endblock %}

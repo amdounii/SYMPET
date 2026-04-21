@@ -3,13 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Commande;
-use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * @extends ServiceEntityRepository<Commande>
- */
 class CommandeRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -17,11 +13,12 @@ class CommandeRepository extends ServiceEntityRepository
         parent::__construct($registry, Commande::class);
     }
 
-    public function findByUser(User $user): array
+    public function findByUser(int $userId): array
     {
         return $this->createQueryBuilder('c')
-            ->andWhere('c.user = :user')
-            ->setParameter('user', $user)
+            ->join('c.user', 'u')
+            ->where('u.id = :id')
+            ->setParameter('id', $userId)
             ->orderBy('c.dateCommande', 'DESC')
             ->getQuery()
             ->getResult();
@@ -30,10 +27,29 @@ class CommandeRepository extends ServiceEntityRepository
     public function findByStatut(string $statut): array
     {
         return $this->createQueryBuilder('c')
-            ->andWhere('c.statut = :statut')
+            ->where('c.statut = :statut')
             ->setParameter('statut', $statut)
             ->orderBy('c.dateCommande', 'DESC')
             ->getQuery()
             ->getResult();
+    }
+
+    public function countCommandesParPeriode(\DateTimeInterface $dateDebut, \DateTimeInterface $dateFin): int
+    {
+        return (int) $this->createQueryBuilder('c')
+            ->select('COUNT(c.id)')
+            ->where('c.dateCommande BETWEEN :dateDebut AND :dateFin')
+            ->setParameter('dateDebut', $dateDebut)
+            ->setParameter('dateFin', $dateFin)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function getChiffreAffaire(): float
+    {
+        return (float) $this->createQueryBuilder('c')
+            ->select('COALESCE(SUM(c.total), 0)')
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 }

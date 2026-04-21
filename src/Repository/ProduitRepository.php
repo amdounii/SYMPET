@@ -6,9 +6,6 @@ use App\Entity\Produit;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * @extends ServiceEntityRepository<Produit>
- */
 class ProduitRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -19,7 +16,7 @@ class ProduitRepository extends ServiceEntityRepository
     public function findByNom(string $nom): array
     {
         return $this->createQueryBuilder('p')
-            ->andWhere('p.nom LIKE :nom')
+            ->where('p.nom LIKE :nom')
             ->setParameter('nom', '%' . $nom . '%')
             ->orderBy('p.id', 'DESC')
             ->getQuery()
@@ -30,18 +27,30 @@ class ProduitRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('p')
             ->join('p.categorie', 'c')
-            ->andWhere('c.id = :id')
+            ->where('c.id = :id')
             ->setParameter('id', $categorieId)
             ->orderBy('p.id', 'DESC')
             ->getQuery()
             ->getResult();
     }
 
-    public function findProduitsDisponibles(): array
+    public function findProduitsEnStock(): array
     {
         return $this->createQueryBuilder('p')
-            ->andWhere('p.stock > 0')
+            ->where('p.stock > 0')
             ->orderBy('p.id', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findTopProduits(int $limit = 5): array
+    {
+        return $this->createQueryBuilder('p')
+            ->select('p, COALESCE(SUM(lc.quantite), 0) AS totalVendu')
+            ->leftJoin('p.ligneCommandes', 'lc')
+            ->groupBy('p.id')
+            ->orderBy('totalVendu', 'DESC')
+            ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
     }

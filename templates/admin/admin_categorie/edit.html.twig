@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier catégorie{% endblock %}
+
+{% block body %}
+    <h1 class="mb-4">Modifier la catégorie</h1>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form method="post">
+                <div class="mb-3">
+                    <label class="form-label">Nom</label>
+                    <input type="text" name="nom" class="form-control" value="{{ categorie.nom }}">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    <textarea name="description" class="form-control">{{ categorie.description }}</textarea>
+                </div>
+
+                <button class="btn btn-primary">Modifier</button>
+                <a href="{{ path('admin_categorie_index') }}" class="btn btn-secondary">Retour</a>
+            </form>
+        </div>
+    </div>
+{% endblock %}

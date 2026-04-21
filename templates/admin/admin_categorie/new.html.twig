@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle catégorie{% endblock %}
+
+{% block body %}
+    <h1 class="mb-4">Ajouter une catégorie</h1>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form method="post">
+                <div class="mb-3">
+                    <label class="form-label">Nom</label>
+                    <input type="text" name="nom" class="form-control">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    <textarea name="description" class="form-control"></textarea>
+                </div>
+
+                <button class="btn btn-success">Enregistrer</button>
+                <a href="{{ path('admin_categorie_index') }}" class="btn btn-secondary">Retour</a>
+            </form>
+        </div>
+    </div>
+{% endblock %}
